@@ -1,0 +1,14 @@
+{
+    "name": "charleschan888/vedio-project",
+    "description": "vedio project",
+    "type": "MIT",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "charles",
+            "email": "13560336325@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
