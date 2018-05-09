@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台登录</title>
+	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
+</head>
+<body style='background: #01AAED;'>
+	<div style='position: absolute;left:50%;top:50%;width: 25%;margin-left: -250px;margin-top: -200px;'>
+		<div style="background:#ffffff;padding:20px;border-radius:4px;box-shadow:5px 5px 20px #444444;">
+			<form>
+			<div class='layui-form'>
+				<div class='layui-form-item' style='color:#999;'>
+					<h2 style='margin:0 auto;text-align: center;'>后台登录</h2>
+				</div>
+				<hr />
+				<div class='layui-form-item'>
+					<label class="layui-form-label">用户名：</label>
+					<div class="layui-input-block">
+				      <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+				    </div>
+				</div>
+				<div class='layui-form-item'>
+				    <label class="layui-form-label">密码：</label>
+					<div class="layui-input-block">
+				      <input type="password" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+				    </div>
+				</div>
+				<div class="layui-form-item">
+				    <label class="layui-form-label">验证码：</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="code" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+				    </div>
+				    <div class="layui-form-mid layui-word-aux"><img src="" /></div>
+				</div>
+				<div class="layui-form-item">
+				    <div class="layui-input-block">
+				      <button class="layui-btn" lay-submit lay-filter="formDemo">登录</button>
+				    </div>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
