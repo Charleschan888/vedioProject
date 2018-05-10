@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>后台登录</title>
+	<title>仿爱奇艺后台登录</title>
 	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
 </head>
 <body style='background: #01AAED;'>
@@ -31,7 +31,7 @@
 				    <div class="layui-input-inline">
 				      <input type="text" name="code" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
 				    </div>
-				    <div class="layui-form-mid layui-word-aux"><img src="" /></div>
+				    <div class="layui-word-aux"><img src="{:url('Entry/getVerify')}" onclick="this.src = '{:url(\'Entry/getVerify\')}?t=' + Math.random() " /></div>
 				</div>
 				<div class="layui-form-item">
 				    <div class="layui-input-block">

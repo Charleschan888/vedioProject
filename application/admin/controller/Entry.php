@@ -22,4 +22,18 @@ class Entry extends Controller {
     	return $this->fetch();
 		
     }
+
+    //tp5验证码方法
+    public function getVerify(){
+    	$config = [
+    		'codeSet'=>'0123456789',
+    		'fontSize'=>15,
+    		'length'=>4,
+    		'useNoise'=>false,
+    		'useCurve'=>false,
+    		'bg'=>[243, 200, 200],
+    	];
+		$captcha = new \think\captcha\Captcha($config);
+		return $captcha->entry();
+    }
 }
