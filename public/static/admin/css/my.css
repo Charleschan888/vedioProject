@@ -1,0 +1,100 @@
+/*首页头部栏*/
+.header{
+	width:100%;
+	height: 50px;
+	line-height: 50px;
+	background: #1E9FFF;
+}
+.header_title{
+	margin-left: 15px;
+	color:#FFFFFF;
+	font-size: 18px;
+}
+.header_userinfo{
+	color: #ffffff;
+	float: right;
+	margin-right: 15px;
+}
+.header_userinfo a{
+	color: #ffffff;
+	text-decoration: none;
+}
+/*首页侧边栏*/
+.left_side{
+	width:15%;
+	background: #393D49;
+	color:#ffffff;
+	position: absolute;
+}
+.left_side .layui-colla-content{
+	border-top:none;
+	padding:0px;
+}
+.left_side .layui-colla-title{
+	background: #393D49;
+	color:#ffffff;
+}
+.left_side .layui-colla-item{
+	border-top:none;
+}
+.left_side .layui-collapse{
+	border:none;
+}
+.left_side .layui-colla-content .layui-nav-tree{
+	width:100%;
+}
+/*首页的主面板*/
+.main_box{
+	width:85%;
+	position:absolute;
+	left:15%;
+}
+
+
+/**** 管理员页面 ****/
+
+/*管理员页面头部*/
+.admin_header{
+	margin:5px auto;
+	width:95%;
+	height: 35px;
+	border-bottom: 1px solid #5FB878;
+}
+.admin_header .admin_title{
+	display: block;
+	text-align: center;
+	background: #5FB878;
+	width:90px;
+	padding:5px;
+	margin-top:25px;
+	color:#ffffff;
+}
+.admin_header .admin_add_btn{
+	display: block;
+	float: right;
+	margin-top: -30px;
+}
+/*管理员表格*/
+.admin_table{
+	margin:5px auto;
+	width:95%;
+	height: 35px;
+}
+
+/*管理员添加编辑密码*/
+.admin_table_pwd{
+	width:85%;
+}
+.show_pwd{
+	display:block;
+	background:#5FB878;
+	height:99%;
+	width:15%;
+	position: absolute;
+	top:0;
+	right: 0;
+	z-index: 999;
+	line-height: 40px;
+	text-align: center;
+	cursor: pointer;
+}

@@ -26,7 +26,7 @@ class Sysdb{
 			$this->field = '*';
 
 			//把表名存入到该类对象属性
-			$this->table = $talbe;
+			$this->table = $table;
 			return $this;
 	}
 
@@ -68,5 +68,52 @@ class Sysdb{
 		//使用TP5的db操作 tp5的select方法默认查询错误则返回null
 		$lists = Db::name( $this->table )->field( $this->field )->where( $this->where )->select();
 		return $lists ? $lists : false;
+	}
+
+	/**
+	 * 封装查询多条数据并把制定字段当键值
+	 * @param string $index 做键值用的字段名称，必须是查询出的filed里面有的字段
+	 * @return mixed 返回查询结果，如果为null返回false
+	 */
+	public function cates($index){
+		$lists = Db::name( $this->table )->field( $this->field )->where( $this->where )->select();
+		if(empty($lists)){
+			return false;
+		}
+		$result = [];
+		foreach ($lists as $key => $value) {
+			$result[$value[$index]] = $value;
+		}
+		return $result ? $result : false;
+	}
+
+	/**
+	 * 封装录入方法
+	 * @param array $data 录入的数据
+	 * @return int 返回录入后的结果
+	 */
+	public function insert($data){
+		$res = Db::name( $this->table )->insert($data);
+		return $res;
+	}
+
+	/**
+	 * 封装更新方法
+	 * @param array $data 需要更新的数据
+	 * @return int 返回更新后的结果
+	 */
+	public function update($data){
+		$res = Db::name( $this->table )->where( $this->where )->update($data);
+		//当结果为false则更新失败，如果为0则没有更新任何数据也返回true
+		return $res===false ? false : true;
+	}
+
+	/**
+	 * 封装删除数据方法
+	 * @return int 返回删除后的结果
+	 */
+	public function delete(){
+		$res = Db::name( $this->table )->where( $this->where )->delete();
+		return $res;
 	}
 }

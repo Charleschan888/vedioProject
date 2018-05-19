@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>管理员页面</title>
+	<link rel="stylesheet" href="__STATIC__/admin/css/my.css">
+	<link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css">
+</head>
+<body>
+	<div class='admin_header'>
+		<span class='admin_title'>管理员列表</span>
+		<!-- 添加管理员 -->
+		<span class='admin_add_btn'>
+			<button class="layui-btn layui-btn-sm" onclick='addEditPage()'>添加</button>
+		</span>
+	</div>
+	<div class='admin_table'>
+		<table class="layui-table">
+		  <thead>
+		    <tr>
+		      <th>用户名</th>
+		      <th>真实姓名</th>
+		      <th>角色</th>
+		      <th>状态</th>
+		      <th>添加时间</th>
+		      <th>操作</th>
+		    </tr> 
+		  </thead>
+		  <tbody>
+		  	<!-- 数据 -->
+		  	{volist name='data.lists' id='vo'}
+		    <tr>
+		      <td>{$vo.username}</td>
+		      <td>{$vo.truename}</td>
+		      <td>{$data['groups'][$vo.gid]['title'] ? : ''}</td>
+		      <td>{$vo.status==0 ? '<font color="green">正常</font>':'<font color="red">禁用</font>'}</td>
+		      <td>{:date('Y-m-d H:i:s',$vo.add_time)}</td>
+		      <td>
+				<button type='button' class="layui-btn layui-btn-sm" onclick='addEditPage({$vo.id})'>编辑</button>
+				<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="removeAdmin({$vo.id})">删除</button>
+		      </td>
+		    </tr>
+		    {/volist}
+		  </tbody>
+		</table>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+	layui.use(['table'],function(){
+		var table = layui.table;
+		var layer = layui.layer;
+		$ = layui.jquery;
+
+	});
+
+	//定义一个打开页面添加或编辑管理员
+	function addEditPage(id){
+		//打开iframe层
+		layer.open({
+		  type: 2,
+		  title: id>0?'编辑管理员':'添加管理员',
+		  shade: 0.3,
+		  area: ['480px', '420px'],
+		  content: '{:url("admin/Admin/addEditPage")}?id='+id //iframe的url
+		});  
+	}
+
+	//定义一个删除管理员的函数
+	function removeAdmin(id){
+		if(id){
+			//弹出confirm框确定是否删除
+			layer.confirm('确定要删除数据吗？', function(index){
+				$.post("{:url('admin/Admin/delete')}",{'id':id},function(res){
+					if(res.code==0){
+						//删除成功
+						layer.msg(res.msg,{
+							icon:1,
+							time:1500,
+							shadeClose:false,
+						},function(){
+							window.location.reload();
+						})
+					}else{
+						//删除失败
+						layer.alert(res.msg);
+					}
+				},'json');
+			}); 
+		}
+	}
+</script>

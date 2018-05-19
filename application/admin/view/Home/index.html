@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台首页</title>
+	<!-- 引入layui -->
+	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+<!-- header -->
+<div class='header'>
+	<span class='header_title'>后台管理页面</span>
+	<!-- 登录管理员信息 -->
+	<span class='header_userinfo'>
+		{:session('adminInfo.username')}【{:session('adminInfo.role')}】
+		<!-- 退出 -->
+		<a href="{:url('admin/Entry/logOut')}" >退出</a>
+	</span>
+</div>
+<!-- header end -->
+<!-- 左侧导航栏 -->
+<div class='left_side'>
+	<div class="layui-collapse" lay-accordion>
+
+	<!-- 菜单 -->
+	  {volist name='menus' id='vo'}
+	  <div class="layui-colla-item">
+	    <h2 class="layui-colla-title">{$vo.title}</h2>
+	    <div class="layui-colla-content">
+	    	<!-- 二级 -->
+	    	<?php if(!empty($vo['children'])):?>
+			<ul class="layui-nav layui-nav-tree" lay-filter="test">
+				{volist name='vo.children' id='cvo'}
+				<li class="layui-nav-item"><a href="javascript:;" onclick='change_iframe(this)' src="<?php echo url('admin/'.$cvo['controller'].'/'.$cvo['method']);?>">{$cvo.title}</a></li>
+				{/volist}
+			</ul>
+			<?php endIf;?>
+	    	<!-- 二级 end -->
+	    </div>
+	  </div>
+	  {/volist}
+	<!-- 菜单 end -->
+
+	</div>
+</div>
+<!-- 左侧导航栏 end -->
+<!-- 右侧主页显示 -->
+<div class='main_box'>
+	<iframe src="{:url('admin/Home/welcome')}" onload="resizeMainBoxHeight(this)" style="width:100%;height:100%;" frameborder="0" scrolling="0"></iframe>
+</div>
+<!-- 右侧主页显示 end -->
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script>
+//注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+layui.use('element', function(){
+  var element = layui.element;
+  //加载jquery
+  $ = layui.jquery;
+
+  //加载页面完成后自动调整左侧栏高度
+  resizeLeftSideHeight();
+});
+
+//定义自动设置左侧导航栏高度函数
+function resizeLeftSideHeight(){
+	//获取头部栏高度
+	var _header_height = $('.header').height();
+	var _resize_height = $(document).height() - _header_height;
+	//设置左边导航栏高度
+	$('.left_side').height(_resize_height);
+}
+
+//定义自动设置右侧主页显示高度
+function resizeMainBoxHeight(iframe){
+	//获取头部栏高度 加多3px 预防iframe里的body偏差值
+	var _header_height = $('.header').height() + 3;
+	var _resize_height = $(document).height() - _header_height;
+	//设置右侧显示主页高度
+	$(iframe).height(_resize_height);
+}
+
+//定义一个点击改变iframe地址的方法函数
+function change_iframe(obj){
+	//获取对应的src属性
+	var _src = $(obj).attr('src');
+	if(_src){
+		$('.main_box iframe').attr('src',_src);
+		return;
+	}
+}
+</script>

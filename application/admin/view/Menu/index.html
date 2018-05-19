@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>菜单列表页</title>
+	<!-- 引入layui -->
+	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+	<div class='admin_header'>
+		<span class='admin_title'>菜单列表</span>
+		{if $pid gt 0}
+		<!-- 当如果是查看的是子集菜单则显示 -->
+		<span class='admin_add_btn'>
+			<button class="layui-btn layui-btn-primary layui-btn-sm" onclick='showCates({$parent_id})'>返回上级</button>
+		</span>
+		<!-- 当如果是查看的是子集菜单则显示 end -->
+		{/if}
+	</div>
+	<form class='layui-form'>
+		<div class='admin_table'>
+			<table class="layui-table">
+			  <thead>
+			    <tr>
+			      <th>ID</th>
+			      <th>排序</th>
+			      <th>菜单名称</th>
+			      <th>controller</th>
+			      <th>method</th>
+			      <th>是否隐藏</th>
+			      <th>是否禁用</th>
+			      <th>操作</th>
+			    </tr> 
+			  </thead>
+			  <tbody>
+			  	<!-- 数据 -->
+			  	{volist name='data.menus' id='vo'}
+			    <tr>
+			      <td>{$vo.id}</td>
+			      <td><input class='layui-input' style="width: 50px;" name='orders[{$vo.id}]' value="{$vo.order}" /></td>
+			      <td><input class='layui-input' name='titles[{$vo.id}]' value="{$vo.title}" /></td>
+			      <td><input class='layui-input' name='controllers[{$vo.id}]' value="{$vo.controller}" /></td>
+			      <td><input class='layui-input' name='methods[{$vo.id}]' value="{$vo.method}" /></td>
+			      <td><input type='checkbox' name='isHiddens[{$vo.id}]' value="1" {$vo.ishidden==1?'checked':''} lay-skin="primary" title="隐藏" /></td>
+			      <td><input type='checkbox' name='status[{$vo.id}]' value="1" {$vo.status==1?'checked':''} lay-skin="primary" title="禁用" /></td>
+			      <td>
+					<button type='button' class="layui-btn layui-btn-sm" onclick='showCates({$vo.id})'>子菜单</button>
+			      </td>
+			    </tr>
+			    {/volist}
+				<!-- 这里增加一条空的数据可以进行新增菜单 -->
+				<tr>
+			      <td></td>
+			      <td><input class='layui-input' style="width: 50px;" name='orders[0]' /></td>
+			      <td><input class='layui-input' name='titles[0]'  /></td>
+			      <td><input class='layui-input' name='controllers[0]' /></td>
+			      <td><input class='layui-input' name='methods[0]' /></td>
+			      <td><input type='checkbox' name='isHiddens[0]' value='1' lay-skin="primary" title="隐藏" /></td>
+			      <td><input type='checkbox' name='status[0]'    value='1' lay-skin="primary" title="禁用" /></td>
+			      <td></td>
+			    </tr>
+			  </tbody>
+			</table>
+			<!-- 保存按钮 -->
+			<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' onclick="save(this);">保存</button>
+		</div>
+		<input type="hidden" name='pid' value='{$pid}' />
+	</form>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+//引用layu组件
+layui.use(['layer','form'],function(){
+	var layer = layui.layer;
+	var form = layui.form;
+	$ = layui.jquery;
+});
+
+//定义查看对应父级id的菜单列表
+function showCates(pid){
+	window.location.href="{:url('admin/Menu/index')}?pid="+pid;
+}
+
+//定义一个保存菜单数据方法（新增，修改，删除一体）
+function save(obj){
+	//使用post方法的ajax提交到后台处理
+	$.post("{:url('admin/Menu/save')}",$('form').serialize(),function(res){
+		if(res.code==0){
+			//保存成功
+			layer.msg(res.msg,{
+				icon:1,
+				time:1500,
+				shadeClose:false,
+			},function(){
+				//刷新页面
+				window.location.reload();
+			});
+		}else{
+			//保存失败
+			layer.alert(res.msg);
+		}
+	},'json');
+}
+</script>

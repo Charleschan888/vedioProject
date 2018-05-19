@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>添加或编辑管理员</title>
+	<link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+	<div style='margin:10px 10px 0 10px;'>
+		<form class="layui-form"> 
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">用 户 名：</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="username" {$data.info.username ? 'readonly' : ''} value="{$data.info.username}" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">真实姓名：</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="truename" value="{$data.info.truename}" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">密　码：</label>
+		    <div class="layui-input-block">
+		      <input type="password" name="password" class="layui-input" class='admin_table_pwd'>
+		      <span class='show_pwd' onclick='show_pwd(this)'><i class="layui-icon layui-icon-password" style="font-size: 25px; color: #FFF;"></i></span>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">角　色：</label>
+		    <div class="layui-input-inline">
+		      <select name="gid" >
+		        	<option value="0">请选择</option>
+		        	{volist name='data.groups' id='vo'}
+		        	<option value="{$vo.id}" {$data.info.gid==$vo.id ? 'selected' : ''}>{$vo.title}</option>
+		        	{/volist}
+		      </select>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">状　态：</label>
+		    <div class="layui-input-block">
+		      <input type="checkbox" value='1' {$data.info.status==1 ? 'checked' : ''} name="status" title="禁用">
+		    </div>
+		  </div>
+		  <input type="hidden" name="id" value="{$data.info.id}" />
+		</form>
+		<div class="layui-form-item">
+		  <div class="layui-input-block">
+		    <button type='button' class="layui-btn" onclick='addEditHandle(this)'>保存</button>
+		  </div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+layui.use(['form'], function(){
+  var form = layui.form;
+  var layer = layui.layer;
+  $ = layui.jquery;
+});
+
+//定义点击显示密码
+function show_pwd(obj){
+	//获取当前密码属性
+	var _obj = $('input[name="password"]');
+	var _type = _obj.attr('type');
+	if(_type=='password'){
+		//转回可看
+		_obj.attr('type','text');
+	}else{
+		//转回密码
+		_obj.attr('type','password');
+	}
+}
+
+//定义保存按钮事件
+function addEditHandle(obj){
+	//获取下id 判断是否编辑还是添加
+	var _id = parseInt( $('input[name="id"]').val() );//转换为整数，如果值为空则转换失败
+	//检查数据
+	var _username = $.trim( $('input[name="username"]').val() );
+	var _password = $.trim( $('input[name="password"]').val() );
+	var _gid = $('select[name="gid"]').val();
+	if(_username==''){
+		layer.alert('请输入用户名');
+		return;
+	}
+	//当如果是编辑的话则需要判断密码是否为空
+	if( isNaN(_id) &&  _password==''){
+		layer.alert('请输入密码');
+		return;
+	}
+	if(_gid<=0){
+		layer.alert('请选择角色');
+		return;
+	}
+	$(obj).attr('disabled',true);
+	$.post('{:url("admin/Admin/addEditHandle")}',$('form').serialize(),function(res){
+		if(res.code==0){
+			//保存成功
+			layer.msg(res.msg,{
+				time:1500,
+				icon:1,
+				shadeClose:false,
+			},function(){
+				//父级页面刷新
+				parent.window.location.reload();
+			})
+		}else{
+			//保存失败
+			layer.alert(res.msg);
+			$(obj).attr('disabled',false);
+		}
+
+	},'json');
+}
+</script>

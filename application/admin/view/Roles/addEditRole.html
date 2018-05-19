@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>添加角色</title>
+	<!-- 引入layui -->
+	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+	<form style='padding:10px;' class='layui-form'>
+		<div class='layui-form-item'>
+			<label class='layui-form-label'>角色名称：</label>
+			<div class='layui-input-block'>
+				<input type="text" name='title' class='layui-input' value="{:isset($roleInfo.title)?$roleInfo.title:''}" />
+			</div>
+		</div>
+		<div class='layui-form-item'>
+			<label class='layui-form-label'>权限菜单：</label>
+			<!-- 数据 -->
+			{volist name='rules' id='vo'}
+			<div class='layui-input-block fisrtAuthBox' style='padding-bottom: 10px;'>
+				<input class='fisrtLevAuth' type="checkbox" {:isset($roleInfo['rules']) && in_array($vo['id'],$roleInfo['rules']) ? 'checked' : ''} name='rules[{$vo.id}]' lay-skin="primary" title='{$vo.title}' />
+				<hr/>
+				<div style="padding-left:20px;" class='secAuthBox'>
+					{volist name='vo.children' id='cvo'}
+					<input type="checkbox" {:isset($roleInfo['rules']) && in_array($cvo['id'],$roleInfo['rules']) ? 'checked' : ''} name='rules[{$cvo.id}]' lay-skin="primary" title='{$cvo.title}' />
+					{/volist}
+				</div>
+			</div>
+			{/volist}
+		</div>
+		<div class='layui-form-item'>
+			<div class='layui-input-block'>
+				<button type='button' class='layui-btn layui-btn-sm' onclick='addRole(this)'>保存</button>
+			</div>
+		</div>
+		<input type="hidden" name='id' value="{:isset($roleInfo.id)?$roleInfo.id:''}" />
+	</form>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+//引用layu组件
+layui.use(['layer','form','jquery'],function(){
+	var layer = layui.layer;
+	var form = layui.form;
+	$ = layui.jquery;
+
+});
+
+//定义保存角色添加函数
+function addRole(obj){
+	//检测下数据
+	if($('input[name="title"]').val()==''){
+		layer.alert('请输入角色名称');
+		return;
+	}
+	$(obj).attr('disabled',true);
+	//ajax提交
+	$.post('{:url("admin/Roles/addRoleSave")}',$('form').serialize(),function(res){
+		if(res.code==0){
+			//添加成功
+			layer.msg(res.msg,{
+				icon:1,
+				time:1500,
+				shadeClose:false,
+			},function(){
+				//父页面刷新
+				parent.window.location.reload();
+			});
+		}else{
+			//添加失败
+			layer.alert(res.msg);
+			$(obj).attr('disabled',false);
+			return;
+		}
+	},'json');
+}
+
+</script>

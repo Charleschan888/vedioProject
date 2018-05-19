@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>角色列表页</title>
+	<!-- 引入layui -->
+	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+	<div class='admin_header'>
+		<span class='admin_title'>角色列表</span>
+		<!-- 添加角色按钮 -->
+		<span class='admin_add_btn'>
+			<button class="layui-btn layui-btn-sm" onclick='addEditRole()'>添加</button>
+		</span>
+	</div>
+	<form class='layui-form'>
+		<div class='admin_table'>
+			<table class="layui-table">
+			  <thead>
+			    <tr>
+			      <th>ID</th>
+			      <th>角色名称</th>
+			      <th>操作</th>
+			    </tr> 
+			  </thead>
+			  <tbody>
+			  	<!-- 数据 -->
+			  	{volist name='data.roles' id='vo'}
+			    <tr>
+			      <td>{$vo.id}</td>
+			      <td>{$vo.title}</td>
+			      <td>
+					<button type='button' class="layui-btn layui-btn-warm layui-btn-sm" onclick='addEditRole({$vo.id})'>编辑</button>
+					<button type='button' class="layui-btn layui-btn-danger layui-btn-sm" onclick='del({$vo.id})'>删除</button>
+			      </td>
+			    </tr>
+			    {/volist}
+			  </tbody>
+			</table>
+		</div>
+	</form>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+//引用layu组件
+layui.use(['layer','form'],function(){
+	var layer = layui.layer;
+	var form = layui.form;
+	$ = layui.jquery;
+});
+
+//定义添加角色函数
+function addEditRole(id){
+	//打开layer的iframe层
+	layer.open({
+		  type: 2,
+		  title: '添加角色',
+		  shade: 0.3,
+		  area: ['40%', '80%'],
+		  content: '{:url("admin/Roles/addEditRole")}?id='+id 
+	}); 
+}
+
+//定义删除角色函数
+function del(id){
+	if(id>0){
+		//执行layer的confirm
+		layer.confirm('确定要删除角色？',{
+			icon:3,
+			shadeClose:false,
+		},function(){
+			$.post('{:url("admin/Roles/delete")}',{'id':id},function(res){
+				if(res.code==0){
+					//删除成功
+					layer.msg(res.msg,{
+						icon:2,
+						time:1500,
+						shadeClose:false,
+					},function(){
+						window.location.reload();
+					});
+				}else{
+					//删除失败
+					layer.alert(res.msg);
+				}
+			},'json');
+		});
+	}
+}
+</script>
