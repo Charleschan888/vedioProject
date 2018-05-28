@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+    <title>首页</title>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="__STATIC__/index/css/bootstrap.min.css"  type="text/css">
+	<!-- Custom CSS -->
+    <link rel="stylesheet" href="__STATIC__/index/css/style.css">
+	<!-- Owl Carousel Assets -->
+    <link href="__STATIC__/index/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="__STATIC__/index/owl-carousel/owl.theme.css" rel="stylesheet">
+	<!-- Custom Fonts -->
+    <link rel="stylesheet" href="__STATIC__/index/font-awesome-4.4.0/css/font-awesome.min.css"  type="text/css">
+	<!-- jQuery -->
+	<script src="__STATIC__/index/js/jquery-2.1.1.js"></script>
+	<!-- Core JavaScript Files -->  	 
+    <script src="__STATIC__/index/js/bootstrap.min.js"></script>
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="__STATIC__/index/js/html5shiv.js"></script>
+        <script src="__STATIC__/index/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<header>
+	<!--Top-->
+	{include file='public/nav' /}
+	
+	<!--导航栏-->
+    <nav id="menu" class="navbar">
+		<div class="container">
+			<div class="navbar-header"><span id="heading" class="visible-xs">导航</span>
+			  <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+			</div>
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="{:url('index/Index/index')}"><i class="fa fa-home"></i>首页</a></li>
+					<!-- 频道标签 -->
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 频道</a>
+						<div class="dropdown-menu">
+							<div class="dropdown-inner">
+								<ul class="list-unstyled">
+									{volist name="$data['labels']['channel']" id='channel'}
+									<li><a href="{:url('index/Index/cate',['channel_id'=>$channel.id])}">{$channel.title}</a></li>
+									{/volist}
+								</ul>
+							</div>
+						</div>
+					</li>
+					<!-- 频道标签 end -->
+					
+					<!-- 资费标签 -->
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 资费</a>
+						<div class="dropdown-menu">
+							<div class="dropdown-inner">
+								<ul class="list-unstyled">
+									{volist name="$data['labels']['charge']" id='charge'}
+									<li><a href="{:url('index/Index/cate',['charge_id'=>$charge.id])}">{$charge.title}</a></li>
+									{/volist}
+								</ul>
+							</div> 
+						</div>
+					</li>
+					<!-- 资费标签 end -->
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 地区</a>
+						<div class="dropdown-menu">
+							<div class="dropdown-inner">
+								<ul class="list-unstyled">
+									{volist name="$data['labels']['area']" id='area'}
+									<li><a href="{:url('index/Index/cate',['area_id'=>$area.id])}">{$area.title}</a></li>
+									{/volist}
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 类别</a>
+						<div class="dropdown-menu">
+							<div class="dropdown-inner">
+								<ul class="list-unstyled">
+									{volist name="$data['labels']['cate']" id='cate'}
+									<li><a href="{:url('index/Index/cate',['cate_id'=>$cate.id])}">{$cate.title}</a></li>
+									{/volist}
+								</ul>
+								<!-- <ul class="list-unstyled">
+									<li><a href="archive.html">Text 306</a></li>
+									<li><a href="archive.html">Text 307</a></li>
+									<li><a href="archive.html">Text 308</a></li>
+									<li><a href="archive.html">Text 309</a></li>
+									<li><a href="archive.html">Text 310</a></li>
+								</ul> -->
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!--导航栏 end-->
+	
+	<div class="header-slide">
+		<!-- 首屏幻灯片 -->
+		<div id="owl-demo" class="owl-carousel">
+			{volist name='data.index_slide' id='vo'}
+			<div class="item">
+				<div class="zoom-container">
+					<div class="zoom-caption">
+						<!-- <span>NEW</span> -->
+						<a href="{$vo.url}">
+							<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+						</a>
+						<p style='font-size:14px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;'>{$vo.title}</p>
+					</div>
+					<img style="width:100%;height:100px;" src="{$vo.img}" alt="{$vo.title}">
+				</div>
+			</div>
+			{/volist}
+		</div>
+		<!-- 首屏幻灯片 end -->
+	</div>
+</header>
+<!-- Header -->
+	
+	<!-- /////////////////////////////////////////Content -->
+    <div id="page-content" class="index-page">
+	
+		<div class="container">
+			<!-- 最新影片 -->
+			<div class="row">
+				<div class="featured">
+					{volist name='data.vedio_new' id='new1' offset="0" length='1'}
+					<div class="main-vid">
+						<div class="col-md-6">
+							<div class="zoom-container" style="margin-bottom: 20px;">
+								<div class="zoom-caption">
+									<span>NEW</span>
+									<a href="{:url('index/Index/play',['id'=>$new1['id']])}">
+										<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+									</a>
+									<p>{$new1.title}</p>
+								</div>
+								<img src='{$new1.cover}' alt="{$new1.title}" />
+							</div>
+						</div>
+					</div>
+					{/volist}
+					<div class="sub-vid">
+						{volist name='data.vedio_new' id='new2' offset="1" length='4'}
+						{if condition="$i%2 eq 1"}
+						<div class="col-md-3">
+							<div class="zoom-container">
+								<div class="zoom-caption">
+									<span>NEW</span>
+									<a href="{:url('index/Index/play',['id'=>$new2['id']])}">
+										<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+									</a>
+									<p>{$new2.title}</p>
+								</div>
+								<img src="{$new2.cover}" />
+							</div>
+							<div class="zoom-container">
+								<div class="zoom-caption">
+									<span>NEW</span>
+									<a href="{:url('index/Index/play',['id'=>$data['vedio_new'][$key+1]['id']])}">
+										<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+									</a>
+									<p>{$data['vedio_new'][$key+1]['title']}</p>
+								</div>
+								<img src="{$data['vedio_new'][$key+1]['cover']}" />
+							</div>
+						</div>
+						{/if}
+						{/volist}
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<!-- 最新影片 end -->
+			<div class="row">
+				<div id="main-content" class="col-md-8">
+					<!-- 会员专区 -->
+					<?php if(!empty($data['vedio_vip'])):?>
+					<div class="box">
+						<div class="box-header">
+							<h2><i class="fa fa-globe"></i> 会员专区</h2>
+						</div>
+						<div class="box-content">
+							<div class="row">
+								<!-- 第一部分 -->
+								<div class="col-md-6">
+									{volist name='data.vedio_vip' id='vip1' offset='0' length='3'}
+									{if condition="$i==1"}
+									<div class="wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span style='background:yellow;color:red;'>Vip</span>
+												<a href="{:url('index/Index/play',['id'=>$vip1.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$vip1.title}</p>
+											</div>
+											<img src="{$vip1.cover}" />
+										</div>
+										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$vip1.id])}">{$vip1.title}</a></h3>
+										<div class="info">
+											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$vip1['add_time'])}</span> 
+											<span><i class="fa fa-heart"></i>{$vip1.pv}</span>
+										</div>
+									</div>
+									<p class="more">{$vip1.desc}</p>
+									<a href="{:url('index/Index/play',['id'=>$vip1.id])}" class="btn btn-1">Read More</a>
+									<div class="line"></div>
+									{else /}
+									
+									<div class="post wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span style='background:yellow;color:red;'>Vip</span>
+												<a href="{:url('index/Index/play',['id'=>$vip1.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$vip1.title}</p>
+											</div>
+											<img src="{$vip1.cover}" />
+										</div>
+										<div class="wrapper">
+											<h5 class="vid-name"><a href="{:url('index/Index/play',['id'=>$vip1.id])}">{$vip1.title}</a></h5>
+											<div class="info">
+												<!-- <h6>By <a href="#">Kelvin</a></h6> -->
+												<span><i class="fa fa-calendar"></i>25/3/2015</span> 
+												<span><i class="fa fa-heart"></i>1,200</span>
+											</div>
+										</div>
+									</div>
+									{/if}
+									{/volist}
+								</div>
+								<!-- 第一部分 end -->
+								<!-- 第二部分 -->
+								<div class="col-md-6">
+									{volist name='data.vedio_vip' id='vip2' offset='3' length='3'}
+									{if condition="$i==1"}
+									<div class="wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span style='background:yellow;color:red;'>Vip</span>
+												<a href="{:url('index/Index/play',['id'=>$vip2.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$vip2.title}</p>
+											</div>
+											<img src="{$vip2.cover}" />
+										</div>
+										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$vip2.id])}">{$vip2.title}</a></h3>
+										<div class="info">
+											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$vip2['add_time'])}</span> 
+											<span><i class="fa fa-heart"></i>{$vip2.pv}</span>
+										</div>
+									</div>
+									<p class="more">{$vip2.desc}</p>
+									<a href="{:url('index/Index/play',['id'=>$vip2.id])}" class="btn btn-1">Read More</a>
+									<div class="line"></div>
+									{else /}
+									<div class="post wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span style='background:yellow;color:red;'>Vip</span>
+												<a href="{:url('index/Index/play',['id'=>$vip2.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$vip2.title}</p>
+											</div>
+											<img src="{$vip2.cover}" />
+										</div>
+										<div class="wrapper">
+											<h5 class="vid-name"><a href="{:url('index/Index/play',['id'=>$vip2.id])}">{$vip2.title}</a></h5>
+											<div class="info">
+												<!-- <h6>By <a href="#">Kelvin</a></h6> -->
+												<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$vip2['add_time'])}</span> 
+												<span><i class="fa fa-heart"></i>{$vip2.pv}</span>
+											</div>
+										</div>
+									</div>
+									{/if}
+									{/volist}
+								</div>
+								<!-- 第二部分 end -->
+							</div>
+						</div>
+						<div class="line"></div>
+					</div>
+					<!-- 会员专区 end-->
+					<?php endIf;?>
+					<!-- 热门专区 -->
+					<div class="box">
+						<div class="box-header">
+							<h2><i class="fa fa-play-circle-o"></i> 热门专区</h2>
+						</div>
+						<div class="box-content">
+							<div class="row">
+								{volist name='data.vedio_hot' id='hot'}
+								<?php if($i % 2 == 1 ):?>
+								<div class="col-md-4">
+									<div class="wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span>HOT</span>
+												<a href="{:url('index/Index/play',['id'=>$hot.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$hot.title}</p>
+											</div>
+											<img src="{$hot.cover}" />
+										</div>
+										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$hot.id])}">{$hot.title}</a></h3>
+										<div class="info">
+											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$hot['add_time'])}</span> 
+											<span><i class="fa fa-heart"></i>{$hot.pv}</span>
+										</div>
+									</div>
+									<?php if(!empty($data['vedio_hot'][$key+1])):?>
+									<div class="wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span>HOT</span>
+												<a href="{:url('index/Index/play',['id'=>$data['vedio_hot'][$key+1]['id']])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$data['vedio_hot'][$key+1]['title']}</p>
+											</div>
+											<img src="{$data['vedio_hot'][$key+1]['cover']}" />
+										</div>
+										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$data['vedio_hot'][$key+1]['id']])}">{$data['vedio_hot'][$key+1]['title']}</a></h3>
+										<div class="info">
+											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$data['vedio_hot'][$key+1]['add_time'])}</span> 
+											<span><i class="fa fa-heart"></i>{$data['vedio_hot'][$key+1]['pv']}</span>
+										</div>
+									</div>
+									<?php endIf;?>
+								</div>
+								<?php endIf;?>
+								{/volist}
+							</div>
+						</div>
+						<div class="line"></div>
+					</div>
+					<!-- 热门专区 end -->
+					<!-- 评分高专区 -->
+					<div class="box">
+						<div class="box-header">
+							<h2><i class="fa fa-globe"></i> 高评分</h2>
+						</div>
+						<div class="box-content">
+							<div class="row">
+								{volist name='data.vedio_score' id='score1' offset='0' length='1'}
+								<div class="col-md-6">
+									<div class="wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span><i class="fa fa-star" style="color: yellow;"></i></span>
+												<a href="{:url('index/Index/play',['id'=>$score1.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$score1.title}</p>
+											</div>
+											<img src="{$score1.cover}" />
+										</div>
+										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$score1.id])}">{$score1.title}</a></h3>
+										<div class="info">
+											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$score1.add_time)}</span> 
+											<span><i class="fa fa-heart"></i>{$score1.pv}</span>
+										</div>
+									</div>
+									<p class="more">{$score1.desc}</p>
+									<a href="{:url('index/Index/play',['id'=>$score1.id])}" class="btn btn-1">Read More</a>
+								</div>
+								{/volist}
+								<div class="col-md-6">
+									{volist name='data.vedio_score' id='score2' offset='1' length='4'}
+									<div class="post wrap-vid">
+										<div class="zoom-container">
+											<div class="zoom-caption">
+												<span><i class="fa fa-star" style="color: yellow;"></i></span>
+												<a href="{:url('index/Index/play',['id'=>$score2.id])}">
+													<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+												</a>
+												<p>{$score2.title}</p>
+											</div>
+											<img src="{$score2.cover}" />
+										</div>
+										<div class="wrapper">
+											<h5 class="vid-name"><a href="{:url('index/Index/play',['id'=>$score2.id])}">{$score2.title}</a></h5>
+											<div class="info">
+												<!-- <h6>By <a href="#">Kelvin</a></h6> -->
+												<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$score2.add_time)}</span> 
+												<span><i class="fa fa-heart"></i>{$score2.pv}</span>
+											</div>
+										</div>
+									</div>
+									{/volist}
+								</div>
+							</div>
+						</div>
+						<div class="line"></div>
+					</div>
+					<!-- 评分高专区 -->
+					
+				</div>
+				<!-- 右边推荐栏 -->
+				{include file='public/sideBar' /}
+				<!-- 右边推荐栏 end -->
+			</div>
+		</div>
+		
+	</div>
+	<!-- Footer -->
+	{include file='public/footer' /}
+	<!-- Footer -->
+	
+	<!-- JS -->
+	<script src="__STATIC__/index/owl-carousel/owl.carousel.js"></script>
+    <script>
+    $(document).ready(function() {
+      $("#owl-demo").owlCarousel({
+        autoPlay: 3000,
+        items : 5,
+        itemsDesktop : [1199,4],
+        itemsDesktopSmall : [979,4]
+      });
+
+    });
+    </script>
+	
+</body>
+</html>

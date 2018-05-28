@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+    <title>影片列表页</title>
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="__STATIC__/index/css/bootstrap.min.css"  type="text/css">
+	
+	<!-- Custom CSS -->
+    <link rel="stylesheet" href="__STATIC__/index/css/style.css">
+	
+	<!-- Owl Carousel Assets -->
+    <link href="__STATIC__/index/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="__STATIC__/index/owl-carousel/owl.theme.css" rel="stylesheet">
+	
+	<!-- Custom Fonts -->
+    <link rel="stylesheet" href="__STATIC__/index/font-awesome-4.4.0/css/font-awesome.min.css"  type="text/css">
+	
+	<!-- jQuery and Modernizr-->
+	<script src="__STATIC__/index/js/jquery-2.1.1.js"></script>
+	
+	<!-- Core JavaScript Files -->  	 
+    <script src="__STATIC__/index/js/bootstrap.min.js"></script>
+	
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="__STATIC__/index/js/html5shiv.js"></script>
+        <script src="__STATIC__/index/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+		.labelFilter{
+			margin:5px;
+			padding:.5em 0.5em .5em;
+			cursor: pointer;
+			display: inline-block;
+		}
+		.labelFilter a{
+			color:#fff;
+		}
+		.selected{
+			background: green;
+			color:#fff;
+		}
+    </style>
+</head>
+
+<body>
+<header>
+	<!--Top-->
+	{include file='public/nav' /}
+	
+	<!-- 分类列表 -->
+    <nav id="menu" class="navbar">
+		<div class="container">
+			<div class="navbar-header"><span id="heading" class="visible-xs">筛选</span>
+			  <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+			</div>
+			<!-- 频道 -->
+			<div style='margin-bottom: 10px;' class="collapse navbar-collapse navbar-ex1-collapse">
+				<span class="label text-primary">频道：</span>
+				<span class="label label-default labelFilter <?php if(!in_array($data['channel_id'],$data['channel_ids']))  echo ' selected' ;?>"><a href='javascript:;' data-ele='channel_id' data-val='0'>全部</a></span>
+				{volist name='data.labels.channel' id='channel'}
+					<span class="label label-default labelFilter <?php if($data['channel_id'] == $channel['id']) echo ' selected' ;?>" ><a href='javascript:;' data-ele='channel_id' data-val="{$channel['id']}">{$channel.title}</a></span>
+				{/volist}
+			</div>
+			<!-- 频道 end -->
+			<!-- 资费 -->
+			<div style='margin-bottom: 10px;' class="collapse navbar-collapse navbar-ex1-collapse">
+				<span class="label text-primary">资费：</span>
+				<span class="label label-default labelFilter <?php if(!in_array($data['charge_id'],$data['charge_ids']))  echo ' selected' ;?>"><a href='javascript:;' data-ele='charge_id' data-val="0">全部</a></span>
+				{volist name='data.labels.charge' id='charge'}
+					<span class="label label-default labelFilter <?php if($data['charge_id'] == $charge['id']) echo ' selected' ;?>"><a href='javascript:;' data-ele='charge_id' data-val="{$charge['id']}">{$charge.title}</a></span>
+				{/volist}
+			</div>
+			<!-- 资费 end -->
+			<!-- 地区 -->
+			<div style='margin-bottom: 10px;' class="collapse navbar-collapse navbar-ex1-collapse">
+				<span class="label text-primary">地区：</span>
+				<span class="label label-default labelFilter <?php if(!in_array($data['area_id'],$data['area_ids']))  echo ' selected' ;?>"><a href='javascript:;' data-ele='area_id' data-val="0">全部</a></span>
+				{volist name='data.labels.area' id='area'}
+					<span class="label label-default labelFilter <?php if($data['area_id'] == $area['id']) echo ' selected' ;?>"><a href='javascript:;' data-ele='area_id' data-val="{$area['id']}">{$area.title}</a></span>
+				{/volist}
+			</div>
+			<!-- 地区 end -->
+			<!-- 分类 -->
+			<div style='margin-bottom: 10px;' class="collapse navbar-collapse navbar-ex1-collapse">
+				<span class="label text-primary">类别：</span>
+				<span class="label label-default labelFilter <?php if(!in_array($data['cate_id'],$data['cate_ids']))  echo ' selected' ;?>"><a href='javascript:;' data-ele='cate_id' data-val="0">全部</a></span>
+				{volist name='data.labels.cate' id='cate'}
+					<span class="label label-default labelFilter <?php if($data['cate_id'] == $cate['id']) echo ' selected' ;?>"><a href='javascript:;' data-ele='cate_id' data-val="{$cate['id']}">{$cate.title}</a></span>
+				{/volist}
+			</div>
+			<!-- 分类 end -->
+		</div>
+	</nav>
+	<!-- 分类列表 end -->
+	
+	
+	<!-- 内容 -->
+	<div id="page-content" class="archive-page">
+		<div class="container">
+			<div class="row">
+				<div id="main-content" class="col-md-8">
+					{volist name='data.data.lists' id='vedio'}
+					<article>
+						<a href="{:url('index/Index/play',['id'=>$vedio['id']])}"><h2 class="vid-name">{$vedio.title}</h2></a>
+						<div class="info">
+							<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+							<span><i class="fa fa-calendar"></i> {:date('Y-m-d',$vedio.add_time)}</span> 
+							<span><i class="fa fa-comment"></i> 0 Comments</span>
+							<span><i class="fa fa-heart"></i>{$vedio.pv}</span>
+							<ul class="list-inline">
+								<li><a href="#" style="text-decoration: underline;color:#333;">Rate</a></li>
+								<li> - </li>
+								<li>
+									<span class="rating">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+									</span>
+								</li>
+							</ul>
+						</div>
+						<div class="wrap-vid">
+							<div class="zoom-container">
+								<div class="zoom-caption">
+									{if condition="$vedio.is_vip eq 1"}<span style='background: yellow;color:#fff;'>Vip</span>{/if}
+									<a href="{:url('index/Index/play',['id'=>$vedio.id])}">
+										<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+									</a>
+									<p>{$vedio.title}</p>
+								</div>
+								<img src="{$vedio.cover}" />
+							</div>
+							<p>{$vedio.desc}<a href="{:url('index/Index/play',['id'=>$vedio.id])}">MORE...</a></p>
+						</div>
+					</article>
+					<div class="line"></div>
+					{/volist}
+
+					<center id='pages'>
+						{$data['data']['pages']}
+					</center>
+				</div>
+				<!-- 右边推荐栏 -->
+				{include file='public/sideBar' /}
+				<!-- 右边推荐栏 end -->
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id='channel_id' value="{$data['channel_id']}" />
+	<input type="hidden" id='charge_id' value="{$data['charge_id']}" />
+	<input type="hidden" id='area_id' value="{$data['area_id']}" />
+	<input type="hidden" id='cate_id' value="{$data['cate_id']}" />
+	<!-- Footer -->
+	{include file='public/footer' /}
+	<!-- Footer -->
+	
+	<!-- JS -->
+	<script src="__STATIC__/index/owl-carousel/owl.carousel.js"></script>
+    <script>      
+    $(function(){
+		  //重新绑定分页的跳转
+		  $('#pages a').on('click',function(){
+		  		/*var _url = "{:url('index/Index/cate')}?page="+$(this).text();
+		  		//获取对应的筛选id数据
+		  		var _channel_id = $('#channel_id').val();
+		  		var _charge_id = $('#charge_id').val();
+		  		var _area_id = $('#area_id').val();
+		  		var _cate_id = $('#cate_id').val();
+		  		//拼接筛选条件
+		  		if(_channel_id) _url += '&channel_id='+_channel_id;
+		  		if(_charge_id) _url += '&charge_id='+_charge_id;
+		  		if(_area_id) _url += '&area_id='+_area_id;
+		  		if(_cate_id) _url += '&cate_id='+_cate_id;
+		  		window.location.href = _url;*/
+		  		searchs($(this).text());
+		  		return false;
+		  })
+
+	      //定义点击筛选条件跳转
+	      function searchs(page,ele_id,id){
+	      		var _page = parseInt(page) ? parseInt(page) : 1;
+	      		//修改对应元素的值
+	      		if(ele_id && id && $('input#'+ele_id).size()>0){
+	      			$('#'+ele_id).val(id);
+	      		}
+	      		//拼接筛选条件
+	      		var _url = "{:url('index/Index/cate')}?page="+_page;
+		  		//获取对应的筛选id数据
+		  		var _channel_id = $('#channel_id').val();
+		  		var _charge_id = $('#charge_id').val();
+		  		var _area_id = $('#area_id').val();
+		  		var _cate_id = $('#cate_id').val();
+		  		//拼接筛选条件
+		  		if(_channel_id) _url += '&channel_id='+_channel_id;
+		  		if(_charge_id) _url += '&charge_id='+_charge_id;
+		  		if(_area_id) _url += '&area_id='+_area_id;
+		  		if(_cate_id) _url += '&cate_id='+_cate_id;
+		  		// console.log(_url);return;
+		  		window.location.href = _url;
+		  		return false;
+	      }
+
+	      //绑定筛选按钮事件
+	      $('nav#menu .navbar-collapse a').on('click',function(){
+	      		searchs(1,$(this).attr('data-ele'),$(this).attr('data-val'));
+	      })
+    })
+    </script>
+	
+</body>
+</html>

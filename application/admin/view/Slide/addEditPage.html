@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>添加编辑幻灯片</title>
+	<link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+	<div style='margin:10px 10px 0 10px;'>
+		<form class="layui-form"> 
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">标题：</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="title" value="{$data.info.title}" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">URL：</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="url" value="{$data.info.url}" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">排序：</label>
+		    <div class="layui-input-block">
+		      <input class='layui-input' maxlength="3" type="text" value='{$data.info.order ?:0}' name="order" style='width:50px;' >
+		    </div>
+		  </div>
+		  <div class='layui-form-item'>
+			<label class='layui-form-label'>图片：</label>
+			<button type="button" class="layui-btn" id="upload_img" tyle='button'>
+			  <i class="layui-icon">&#xe67c;</i>上传
+			</button>
+			<img id='previewCover' src="{$data.info.img}" style='width:150px;' />
+			<input type="hidden" id='img_url' name='img' value='{$data.info.img}' />
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">是否显示：</label>
+		    <div class="layui-input-block">
+		      <input type="checkbox" value='1' {$data.info.is_show==1 ? 'checked' : ''} name="is_show" title="是">
+		    </div>
+		  </div>
+		  <input type="hidden" name="id" value="{$data.info.id}" />
+		  <input type="hidden" name="type" value="{$data['type']}" />
+		</form>
+		<div class="layui-form-item">
+		  <div class="layui-input-block">
+		    <button type='button' class="layui-btn" onclick='addEditHandle(this)'>保存</button>
+		  </div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+layui.use(['form','upload'], function(){
+  var form = layui.form;
+  var layer = layui.layer;
+  $ = layui.jquery;
+  var upload = layui.upload;
+  
+  //上传图片实例
+  var uploadInst = upload.render({
+    elem: '#upload_img' //绑定元素
+    ,url: '{:url("admin/Vedio/uploadCover")}' //上传接口
+    ,done: function(res){
+      //上传完毕回调
+      if(res.code==0){
+      	//上传成功
+      	layer.msg(res.msg);
+      	//把url数据放到img和隐藏域中
+      	$('img#previewCover').attr('src',res.url);
+      	$('input#img_url').val(res.url);
+      }else{
+      	layer.alert(res.msg);
+      }
+    }
+    ,error: function(){
+      //请求异常回调
+      layer.alert('error异常');
+    }
+  });
+});
+
+
+//定义保存按钮事件
+function addEditHandle(obj){
+	//检查数据
+	$(obj).attr('disabled',true);
+	$.post('{:url("admin/Slide/addEditHandle")}',$('form').serialize(),function(res){
+		if(res.code==0){
+			//保存成功
+			layer.msg(res.msg,{
+				time:1500,
+				icon:1,
+				shadeClose:false,
+			},function(){
+				//父级页面刷新
+				parent.window.location.reload();
+			})
+		}else{
+			//保存失败
+			layer.alert(res.msg);
+			$(obj).attr('disabled',false);
+		}
+
+	},'json');
+}
+</script>

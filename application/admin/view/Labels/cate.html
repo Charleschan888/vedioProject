@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>分类标签页</title>
+	<!-- 引入layui -->
+	<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/my.css">
+</head>
+<body>
+	<div class='admin_header'>
+		<span class='admin_title'>分类标签</span>
+	</div>
+	<form class='layui-form'>
+		<div class='admin_table'>
+			<table class="layui-table">
+			  <thead>
+			    <tr>
+			      <th>ID</th>
+			      <th>排序</th>
+			      <th>标签名称</th>
+			      <th>是否禁用</th>
+			    </tr> 
+			  </thead>
+			  <tbody>
+			  	<!-- 数据 -->
+			  	{volist name='data' id='vo'}
+			    <tr>
+			      <td>{$vo.id}</td>
+			      <td><input class='layui-input' style="width: 50px;" name='orders[{$vo.id}]' value="{$vo.order}" /></td>
+			      <td><input class='layui-input' name='titles[{$vo.id}]' value="{$vo.title}" /></td>
+			      <td><input type='checkbox' name='status[{$vo.id}]' value="1" {$vo.status==1?'checked':''} lay-skin="primary" title="禁用" /></td>
+			    </tr>
+			    {/volist}
+				<!-- 这里增加一条空的数据可以进行新增菜单 -->
+				<tr>
+			      <td></td>
+			      <td><input class='layui-input' style="width: 50px;" name='orders[0]' /></td>
+			      <td><input class='layui-input' name='titles[0]'  /></td>
+			      <td><input type='checkbox' name='status[0]'    value='1' lay-skin="primary" title="禁用" /></td>
+			    </tr>
+			  </tbody>
+			</table>
+			<!-- 保存按钮 -->
+			<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' onclick="save(this);">保存</button>
+		</div>
+		<input type="hidden" name='flag' value='cate' />
+	</form>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+//引用layu组件
+layui.use(['layer','form'],function(){
+	var layer = layui.layer;
+	var form = layui.form;
+	$ = layui.jquery;
+});
+
+//定义一个保存菜单数据方法（新增，修改，删除一体）
+function save(obj){
+	//使用post方法的ajax提交到后台处理
+	$.post("{:url('admin/Labels/save')}",$('form').serialize(),function(res){
+		if(res.code==0){
+			//保存成功
+			layer.msg(res.msg,{
+				icon:1,
+				time:1500,
+				shadeClose:false,
+			},function(){
+				//刷新页面
+				window.location.reload();
+			});
+		}else{
+			//保存失败
+			layer.alert(res.msg);
+		}
+	},'json');
+}
+</script>

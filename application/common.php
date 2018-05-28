@@ -54,6 +54,10 @@ function formatTrees( $children , &$result = array() ){
  * 检查权限函数
  */
 function checkAuth($current=''){
+	//判断管理员id为1则直接放行
+	if(session('adminInfo.id')==1){
+		return true;
+	}
 	if(empty($current)){
 		$request = think\Request::instance();
 		$current = $request->controller() . '/' . $request->action();
@@ -70,4 +74,18 @@ function checkAuth($current=''){
 		return false;
 	}
 	return true;
+}
+
+/**
+ * 定义一个通用可以获取出所有影片标签数据的函数分好类的
+ */
+function getLabelsCate(){
+	$db = new \Util\data\Sysdb;
+	$res = [];
+	$tmp = $db->table('labels')->field('id,title,flag')->lists();
+	//循环标签数据labels数据分好类
+	foreach ($tmp as $k => $v) {
+		$res[$v['flag']][$v['id']] = $v;
+	}
+	return $res;
 }

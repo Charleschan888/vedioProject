@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>影片列表</title>
+	<link rel="stylesheet" href="__STATIC__/admin/css/my.css">
+	<link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css">
+</head>
+<body>
+	<div class='admin_header'>
+		{if $pid gt 0}
+		<span class='admin_title'>所属影片：{$data.parent.title}</span>
+		<!-- 当如果是查看的是子集影片则显示 当前影片最多2级 -->
+		<span class='vedio_back_btn'>
+			<button class="layui-btn layui-btn-primary layui-btn-sm" onclick='showCates(0)'>返回上级</button>
+		</span>
+		<!-- 当如果是查看的是子集影片则显示 end -->
+		{else /}
+		<span class='admin_title'>影片列表</span>
+		{/if}
+		<!-- 添加影片 -->
+		<span class='vedio_add_btn'>
+			<button class="layui-btn layui-btn-sm" onclick='addEditPage(0,{$pid})'>添加</button>
+		</span>
+	</div>
+	<div class='admin_table'>
+		<!-- 搜索 -->
+		<div class='layui-form-item'>
+			<div class='layui-input-inline'>
+				<input type="text" class='layui-input' value="{$data['wd']}" id='wd' placeholder="请输入影片名称搜索">
+			</div>
+			<button class='layui-btn layui-btn-primary' onclick='searchs()'><i class='layui-icon layui-icon-search' style="font-size: 16px; color: #1E9FFF;"></i>搜索</button>
+		</div>
+		<table class="layui-table">
+		  <thead>
+		    <tr>
+		      <th>ID</th>
+		      <th>频道</th>
+		      <th>资费</th>
+		      <th>地区</th>
+		      <th>分类</th>
+		      <th style='width:180px;'>影片标题</th>
+		      <th>pv</th>
+		      <th>评分</th>
+		      <th>状态</th>
+		      <th>添加时间</th>
+		      <th>操作</th>
+		    </tr> 
+		  </thead>
+		  <tbody>
+		  	<!-- 数据 -->
+		  	{volist name='data.data.lists' id='vo'}
+		    <tr>
+		      <td>{$vo.id}</td>
+		      <td>{$data['labels']['channel'][$vo['channel_id']]['title']}</td>
+		      <td>{$data['labels']['charge'][$vo['charge_id']]['title']}</td>
+		      <td>{$data['labels']['area'][$vo['area_id']]['title']}</td>
+		      <td>{$data['labels']['cate'][$vo['cate_id']]['title']}</td>
+		      <td>{$vo.title}</td>
+		      <td>{$vo.pv}</td>
+		      <td>{$vo.score}</td>
+		      <td>{$vo.status==1 ? '<font color="green">发布</font>':'<font color="red">下线</font>'}</td>
+		      <td>{:date('Y-m-d H:i:s',$vo.add_time)}</td>
+		      <td>
+				<button type='button' class="layui-btn layui-btn-sm" onclick='addEditPage({$vo.id},{$pid})'>编辑</button>
+				<!-- 是否有子集 -->
+				{if condition="$vo.is_sub eq 1"}
+				<button type='button' class="layui-btn layui-btn-sm" onclick='showCates({$vo.id})'>子影片</button>
+				{/if}
+				<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="removeVedio({$vo.id})">删除</button>
+		      </td>
+		    </tr>
+		    {/volist}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id='pages'></div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript">
+	layui.use(['table','laypage'],function(){
+		var table = layui.table;
+		var layer = layui.layer;
+		$ = layui.jquery;
+		var laypage = layui.laypage;
+
+		//layui分页
+		laypage.render({
+		    elem: 'pages' //容器id值
+		    ,count: {$data.data.totle}  //数据总数，从服务端得到
+		    ,limit: {$data.pageSize} //每页显示数量
+		    ,curr : {$data.cur_page}//当前页值
+		    ,jump: function(obj, first){
+			    //首次不执行
+			    if(!first){
+			      //跳转
+			      searchs(obj.curr);
+			      // window.location.href = "{:url('admin/Vedio/index')}?page="+obj.curr;
+			    }
+			}
+		});
+
+	});
+
+	//定义一个打开页面添加或编辑管理员
+	function addEditPage(id,pid){
+		//打开iframe层
+		var _t = layer.open({
+		  type: 2,
+		  title: id>0?'编辑影片':'添加影片',
+		  shade: 0.3,
+		  content: '{:url("admin/Vedio/addEditPage")}?id='+id+'&pid='+pid //iframe的url
+		}); 
+		layer.full(_t);
+	}
+
+	//定义一个查看对应pid的影片的方法 暂时只限定2级
+	function showCates(pid){
+		window.location.href='{:url("admin/Vedio/index")}?pid='+pid;
+	}
+
+	//定义一个删除影片的方法
+	function removeVedio(id){
+		layer.confirm('确定要删除影片数据？',{icon:3},function(){
+			$.post("{:url('admin/Vedio/delete')}",{'id':id},function(res){
+				if(res.code==0){
+					//删除成功
+					layer.msg(res.msg,{
+						icon:1,
+						time:1500
+					},function(){
+						window.location.reload();
+					})
+				}else{
+					//删除失败
+					layer.alert(res.msg);
+				}
+
+			},'json');
+		})
+	}
+
+	/**
+	 * 搜索函数
+	 */
+	function searchs(cur){
+		//获取搜索的词
+		var wd = $.trim( $('#wd').val() );
+		//跳转的url
+		var url = "{:url('admin/Vedio/index')}?pid="+{$pid}+'&page='+cur;
+		if(wd){
+			url += '&wd='+wd;
+		}
+		//跳转
+		window.location.href = url;
+	}
+</script>

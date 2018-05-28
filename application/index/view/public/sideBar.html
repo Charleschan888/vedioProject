@@ -1,0 +1,124 @@
+<div id="sidebar" class="col-md-4">
+	<div class="widget wid-follow">
+		<div class="heading"><h4><i class="fa fa-users"></i> Hellow</h4></div>
+		<div class="content">
+			<img src="__STATIC__/index/images/banner.jpg" />
+		</div>
+	</div>
+	<div class="line"></div>
+	<!-- 标签 -->
+	<div class="widget wid-tags">
+		<div class="heading"><h4><i class="fa fa-tags"></i> 标签</h4></div>
+		<div class="content">
+			<ul class="list-inline">
+				{volist name='data.tags' id='tag'}
+				<li><a href="<?php echo url('index/Index/cate').'?'.$tag['flag'].'_id='.$tag['id'];?>">{$tag.title}</a><?php if(!empty($data['tags'][$key+1])) echo '  ';?></li>
+				{/volist}
+			</ul>
+		</div>
+		<div class="line"></div>
+	</div>
+	<!-- 标签 -->
+	<!-- 综艺 -->
+	<div class="widget wid-post">
+		<div class="heading" ><h4><i class="fa fa-globe"></i> 综艺</h4></div>
+		<div class="content">
+			{volist name='data.vedio_zy' id='zy'}
+			<div class="post wrap-vid">
+				<div class="zoom-container">
+					<div class="zoom-caption">
+						<span style="background:green;color:#fff;">综艺</span>
+						<a href="{:url('index/Index/play',['id'=>$zy.id])}">
+							<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+						</a>
+						<p>{$zy.title}</p>
+					</div>
+					<img src="{$zy.cover}" />
+				</div>
+				<div class="wrapper">
+					<h5 class="vid-name"><a href="{:url('index/Index/play',['id'=>$zy.id])}">{$zy.title}</a></h5>
+					<div class="info">
+						<!-- <h6>By <a href="#">Kelvin</a></h6> -->
+						<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$zy.add_time)}</span> 
+						<span><i class="fa fa-heart"></i>{$zy.pv}</span>
+					</div>
+				</div>
+			</div>
+			{/volist}
+
+		</div>
+		<div class="line"></div>
+	</div>
+	<!-- 综艺 end -->
+	<!-- 电影影片 -->
+	<div class="widget wid-news">
+		<div class="heading"><h4><i class="fa fa-clock-o"></i> 电影</h4></div>
+		<div class="content">
+			{volist name='data.vedio_movie' id='movie'}
+			<div class="wrap-vid">
+				<div class="zoom-container">
+					<div class="zoom-caption">
+						<span style="background:red;color:#fff;">电影</span>
+						<a href="{:url('index/Index/play',['id'=>$movie.id])}">
+							<i class="fa fa-play-circle-o fa-5x" style="color: #fff"></i>
+						</a>
+						<p>{$movie.title}</p>
+					</div>
+					<img src="{$movie.cover}" />
+				</div>
+				<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$movie.id])}">{$movie.title}</a></h3>
+				<div class="info">
+					<!-- <h5>By <a href="#">Kelvin</a></h5> -->
+					<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$movie.add_time)}</span> 
+					<span><i class="fa fa-heart"></i>{$movie.pv}</span>
+				</div>
+			</div>
+			{/volist}
+		</div>
+		<div class="line"></div>
+	</div>
+	<!-- 电影影片 end -->
+	<!-- Start Widget -->
+	<!-- <div class="widget wid-post">
+		<div class="heading"><h4><i class="fa fa-comments"></i> Comment</h4></div>
+		<div class="content">
+			<div class="post">
+				<a href="single.html">
+					<img src="__STATIC__/index/images/user.png" />
+				</a>
+				<div class="wrapper">
+					<a href="#"><h5>Curabitur tincidunt porta lorem.</h5></a>
+					<ul class="list-inline">
+						<li><i class="fa fa-calendar"></i>25/3/2015</li> 
+						<li><i class="fa fa-comments"></i>1,200</li>
+					</ul>
+				</div>
+			</div>
+			<div class="post">
+				<a href="single.html">
+					<img src="__STATIC__/index/images/user.png" />
+				</a>
+				<div class="wrapper">
+					<a href="#"><h5>Curabitur tincidunt porta lorem.</h5></a>
+					<ul class="list-inline">
+						<li><i class="fa fa-calendar"></i>25/3/2015</li> 
+						<li><i class="fa fa-comments"></i>1,200</li>
+					</ul>
+				</div>
+			</div>
+			<div class="post">
+				<a href="single.html">
+					<img src="__STATIC__/index/images/user.png" />
+				</a>
+				<div class="wrapper">
+					<a href="#"><h5>Curabitur tincidunt porta lorem.</h5></a>
+					<ul class="list-inline">
+						<li><i class="fa fa-calendar"></i>25/3/2015</li> 
+						<li><i class="fa fa-comments"></i>1,200</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="line"></div>
+	</div> -->
+</div>

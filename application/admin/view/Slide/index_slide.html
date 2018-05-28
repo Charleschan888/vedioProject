@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首屏幻灯片列表</title>
+	<link rel="stylesheet" href="__STATIC__/admin/css/my.css">
+	<link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css">
+</head>
+<body>
+	<div class='admin_header'>
+		<span class='admin_title'>首屏幻灯片列表</span>
+		<!-- 添加首屏幻灯片 -->
+		<span class='admin_add_btn'>
+			<button class="layui-btn layui-btn-sm" onclick='addEditPage(0,0)'>添加</button>
+		</span>
+	</div>
+	<div class='admin_table layui-form'>
+		<table class="layui-table">
+		  <thead>
+		    <tr>
+		      <th>ID</th>
+		      <th style='width:280px;'>标题</th>
+		      <th>图片</th>
+		      <th>URL</th>
+		      <th>排序</th>
+		      <th>是否显示</th>
+		      <th>操作</th>
+		    </tr> 
+		  </thead>
+		  <tbody>
+		  	<!-- 数据 -->
+		  	{volist name='data.data' id='vo'}
+		    <tr data-id='{$vo.id}'>
+		      <td>{$vo.id}</td>
+		      <td>{$vo.title}</td>
+		      <td><img class='layui-img' src="{$vo.img}" title='{$vo.title}' alt="" style='width:100%;'></td>
+		      <td>{$vo.url}</td>
+		      <td><input type='text' class='layui-input blurOrder' value='{$vo.order}' maxlength="3" style='width:50px;'/></td>
+		      <td><input lay-filter="is_show" class='showStatus' type='checkbox' title='是' {$vo.is_show ? 'checked' : ''} /></td>
+		      <td>
+				<button type='button' class="layui-btn layui-btn-sm" onclick='addEditPage({$vo.id},0)'>编辑</button>
+				<button class="layui-btn layui-btn-sm layui-btn-danger" onclick="removeAdmin({$vo.id})">删除</button>
+		      </td>
+		    </tr>
+		    {/volist}
+		  </tbody>
+		</table>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src='__STATIC__/plugins/layui/layui.js'></script>
+<script type="text/javascript" src='__STATIC__/admin/js/slide.js'></script>
