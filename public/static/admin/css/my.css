@@ -55,24 +55,24 @@
 
 /*管理员页面头部*/
 .admin_header{
-	margin:5px auto;
+	margin:10px auto;
 	width:95%;
 	height: 35px;
 	border-bottom: 1px solid #5FB878;
 }
 .admin_header .admin_title{
-	display: block;
+	display: inline-block;
 	text-align: center;
 	background: #5FB878;
-	width:90px;
+	min-width:90px;
 	padding:5px;
-	margin-top:25px;
+	/*margin-top:25px;*/
 	color:#ffffff;
 }
 .admin_header .admin_add_btn{
 	display: block;
 	float: right;
-	margin-top: -30px;
+	/*margin-top: -30px;*/
 }
 /*管理员表格*/
 .admin_table{
@@ -97,4 +97,23 @@
 	line-height: 40px;
 	text-align: center;
 	cursor: pointer;
+}
+
+/*影片列表按钮*/
+.vedio_add_btn{
+	/*margin-top: -30px;*/
+    right: 3%;
+    position: absolute;
+}
+
+.vedio_back_btn{
+	/*margin-top: -30px;*/
+    position: absolute;
+    right: 8%;
+}
+
+.vedio_parent_title{
+	margin-top: -30px;
+    position: absolute;
+    left: 8%;
 }
