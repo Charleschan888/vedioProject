@@ -24,6 +24,7 @@ class Sysdb{
 			//当使用table方法时需要重置where和filed默认值
 			$this->where = array();
 			$this->field = '*';
+			$this->order = '';
 
 			//把表名存入到该类对象属性
 			$this->table = $table;
@@ -51,6 +52,14 @@ class Sysdb{
 	}
 
 	/**
+	 * 排序方法
+	 */
+	public function order($order = '' ){
+		$this->order = $order;
+		return $this;
+	}
+
+	/**
 	 * 封装查询单条数据方法
 	 * @return array 查询正常应该返回数组数据，查询为空应返回false
 	 */
@@ -66,7 +75,10 @@ class Sysdb{
 	 */
 	public function lists(){
 		//使用TP5的db操作 tp5的select方法默认查询错误则返回null
-		$lists = Db::name( $this->table )->field( $this->field )->where( $this->where )->select();
+		$query = Db::name( $this->table )->field( $this->field )->where( $this->where );
+		//如果有排序则增加排序
+		!empty($this->order) && $query = $query->order($this->order);
+		$lists = $query->select();
 		return $lists ? $lists : false;
 	}
 
@@ -76,7 +88,9 @@ class Sysdb{
 	 * @return mixed 返回查询结果，如果为null返回false
 	 */
 	public function cates($index){
-		$lists = Db::name( $this->table )->field( $this->field )->where( $this->where )->select();
+		$query = Db::name( $this->table )->field( $this->field )->where( $this->where );
+		!empty($this->order) && $query = $query->order($this->order);
+		$lists = $query->select();
 		if(empty($lists)){
 			return false;
 		}
@@ -115,5 +129,44 @@ class Sysdb{
 	public function delete(){
 		$res = Db::name( $this->table )->where( $this->where )->delete();
 		return $res;
+	}
+
+	/**
+	 * 封装数据自增方法
+	 * @param string $colum 需要增加数量的字段名称
+	 * @param intval $num 需要增加的数值，默认为1
+	 * @return int 返回增值后的结果
+	 */
+	public function inc( $column , $num = 1){
+		$res = Db::name( $this->table )->where( $this->where )->setInc($column , $num);
+		return $res;
+	}
+
+	/**
+	 * 封装数据自减方法
+	 * @param string $colum 需要减少数量的字段名称
+	 * @param intval $num 需要减少的数值，默认为1
+	 * @return int 返回减少后的结果
+	 */
+	public function dec( $column , $num = 1){
+		$res = Db::name( $this->table )->where( $this->where )->setDec($column , $num);
+		return $res;
+	}
+
+	/**
+	 * 分页查询方法
+	 * @param intval $perpage 每页显示条数
+	 * @return array $return 返回查询到的数据 包括totle总条数 lists数据 pages分页数据
+	 */
+	public function pages($perpage = 10){
+		//查询出对应的总数
+		$totle = Db::name($this->table)->where($this->where)->count();
+		$query = Db::name($this->table)->where($this->where);
+		//如果有排序数据则
+		!empty($this->order) && $query->order($this->order);
+		//使用paginate方法查询出分页查询
+		$lists = $query->paginate($perpage,$totle);
+
+		return $lists ? ['totle'=>$totle,'lists'=>$lists->items(),'pages'=>$lists->render()] : false;
 	}
 }
