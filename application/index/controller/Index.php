@@ -118,7 +118,7 @@ class Index extends Controller
     	//查询下有无子集
     	if($data['info']['is_sub']==1){
     		//获取出子集的视频数据id
-    		$data['sub_vedio'] = $vm->where(['pid'=>$data['id']])->order(['id'=>'asc'])->cates('id');
+    		$data['sub_vedio'] = $vm->where(['pid'=>$data['id'],'status'=>1])->order(['id'=>'asc'])->cates('id');
     		$data['sub_ids'] = array_column($data['sub_vedio'], 'id');
 	    	//保存当前需要播放的影片数据 
 	    	//如果传过来的子集id不为空 则对应播放子集内容影片 否则默认播放第一集
