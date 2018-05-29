@@ -35,74 +35,7 @@
 	{include file='public/nav' /}
 	
 	<!--导航栏-->
-    <nav id="menu" class="navbar">
-		<div class="container">
-			<div class="navbar-header"><span id="heading" class="visible-xs">导航</span>
-			  <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
-			</div>
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="{:url('index/Index/index')}"><i class="fa fa-home"></i>首页</a></li>
-					<!-- 频道标签 -->
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 频道</a>
-						<div class="dropdown-menu">
-							<div class="dropdown-inner">
-								<ul class="list-unstyled">
-									{volist name="$data['labels']['channel']" id='channel'}
-									<li><a href="{:url('index/Index/cate',['channel_id'=>$channel.id])}">{$channel.title}</a></li>
-									{/volist}
-								</ul>
-							</div>
-						</div>
-					</li>
-					<!-- 频道标签 end -->
-					
-					<!-- 资费标签 -->
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 资费</a>
-						<div class="dropdown-menu">
-							<div class="dropdown-inner">
-								<ul class="list-unstyled">
-									{volist name="$data['labels']['charge']" id='charge'}
-									<li><a href="{:url('index/Index/cate',['charge_id'=>$charge.id])}">{$charge.title}</a></li>
-									{/volist}
-								</ul>
-							</div> 
-						</div>
-					</li>
-					<!-- 资费标签 end -->
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 地区</a>
-						<div class="dropdown-menu">
-							<div class="dropdown-inner">
-								<ul class="list-unstyled">
-									{volist name="$data['labels']['area']" id='area'}
-									<li><a href="{:url('index/Index/cate',['area_id'=>$area.id])}">{$area.title}</a></li>
-									{/volist}
-								</ul>
-							</div>
-						</div>
-					</li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> 类别</a>
-						<div class="dropdown-menu">
-							<div class="dropdown-inner">
-								<ul class="list-unstyled">
-									{volist name="$data['labels']['cate']" id='cate'}
-									<li><a href="{:url('index/Index/cate',['cate_id'=>$cate.id])}">{$cate.title}</a></li>
-									{/volist}
-								</ul>
-								<!-- <ul class="list-unstyled">
-									<li><a href="archive.html">Text 306</a></li>
-									<li><a href="archive.html">Text 307</a></li>
-									<li><a href="archive.html">Text 308</a></li>
-									<li><a href="archive.html">Text 309</a></li>
-									<li><a href="archive.html">Text 310</a></li>
-								</ul> -->
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+    {include file='public/cate' /}
 	<!--导航栏 end-->
 	
 	<div class="header-slide">
@@ -321,7 +254,7 @@
 											</div>
 											<img src="{$hot.cover}" />
 										</div>
-										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$hot.id])}">{$hot.title}</a></h3>
+										<h3 class="vid-name" style="max-height:68px;"><a href="{:url('index/Index/play',['id'=>$hot.id])}">{$hot.title}</a></h3>
 										<div class="info">
 											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
 											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$hot['add_time'])}</span> 
@@ -340,7 +273,7 @@
 											</div>
 											<img src="{$data['vedio_hot'][$key+1]['cover']}" />
 										</div>
-										<h3 class="vid-name"><a href="{:url('index/Index/play',['id'=>$data['vedio_hot'][$key+1]['id']])}">{$data['vedio_hot'][$key+1]['title']}</a></h3>
+										<h3 class="vid-name" style="max-height:68px;"><a href="{:url('index/Index/play',['id'=>$data['vedio_hot'][$key+1]['id']])}">{$data['vedio_hot'][$key+1]['title']}</a></h3>
 										<div class="info">
 											<!-- <h5>By <a href="#">Kelvin</a></h5> -->
 											<span><i class="fa fa-calendar"></i>{:date('Y-m-d',$data['vedio_hot'][$key+1]['add_time'])}</span> 

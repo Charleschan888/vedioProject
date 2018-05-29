@@ -44,7 +44,9 @@
 <header>
 	<!--Top-->
 	{include file='public/nav' /}
-	
+	<!--导航栏-->
+    {include file='public/cate' /}
+	<!--导航栏 end-->
 </header>
 <!-- Header -->
 	
@@ -61,10 +63,14 @@
 					<div class="share">
 						<ul class="list-inline center">
 							<li>
-								<a href="#" class="btn btn-primary"><i class="fa fa-thumbs-o-up"></i> 点赞(<span>{$data['cur_vedio']['like']}</span>)</a>
+								<a href="javascript:;" onclick="likes(this,0)" class="btn btn-primary">
+									<i class="fa fa-thumbs-o-up"></i> 点赞(<span class='showNum'>{$data['cur_vedio']['like']}</span>)
+								</a>
 							</li>
 							<li>
-								<a href="#" class="btn btn-danger"><i class="fa fa-thumbs-o-down"></i> 踩(<span>{$data['cur_vedio']['not_like']}</span>)</a>
+								<a href="javascript:;" onclick="likes(this,1)" class="btn btn-danger">
+									<i class="fa fa-thumbs-o-down"></i> 踩(<span class='showNum'>{$data['cur_vedio']['not_like']}</span>)
+								</a>
 							</li>
 							<li>
 								<a href="#" class="btn btn-warning dropdown-toggle"><i class="fa fa-star"></i> 打分</a>
@@ -138,7 +144,20 @@
 	<script src="__STATIC__/index/owl-carousel/owl.carousel.js"></script>
 	<script type="text/javascript" src="__STATIC__/plugins/ckplayer/ckplayer.min.js"></script>
 	<script type="text/javascript">
+		//进入先判断点赞没有
+		var _curid = "{$data['cur_vedio']['id']}";
+		//获取sessionstage里键值
+		var _key = 'like_'+_curid+'_type:';
+		var _liked = sessionStorage.getItem(_key);
+		if(_liked!=null){
+			if(_liked==0){
+				$('i.fa-thumbs-o-up').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up');
+			}else{
+				$('i.fa-thumbs-o-down').removeClass('fa-thumbs-o-down').addClass('fa-thumbs-down');
+			}
+		}
 
+		// ckplayer实例化
 		var videoObject = {
 			container:'#player-box',
 			variable:'player',
@@ -147,6 +166,31 @@
 			poster:"{$data['cur_vedio']['cover']}"
 		};
 		var player=new ckplayer(videoObject);
+
+		//点赞点踩的函数 0赞 1踩
+		function likes(obj,type){
+			
+			if(sessionStorage.getItem(_key)==null){
+				//没有获取到则代表未点赞则操作点赞
+				$.post("{:url('index/Index/likes')}",{'cur_id':_curid,'type':type},function(res){
+					if(res.code==0){
+						//获取需要更改的对象
+						var _numObj = $(obj).find('.showNum');
+						_numObj.text( parseInt(_numObj.text()) + 1 );//数量加一
+						//修改样式
+						if(type==0){
+							$(obj).find('i').removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up');
+						}else{
+							$(obj).find('i').removeClass('fa-thumbs-o-down').addClass('fa-thumbs-down');
+						}
+						sessionStorage.setItem(_key,type);
+					}else{
+						alert(res.msg);
+					}
+				},'json')
+			}
+		}
+		
 	</script>
 </body>
 </html>

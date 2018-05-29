@@ -23,16 +23,10 @@ class Index extends Controller
     {
     	//获取首屏的幻灯片数据
     	$data['index_slide'] = $this->db->table('slide')->where(['type'=>0,'is_show'=>1])->lists();
-    	//获取标签
-    	/*$labelModel = $this->db->table('labels')->order(['order','id'=>'asc']);
-    	//获取出8个频道标签
-    	$data['channel_list'] = $labelModel->where(['flag'=>'channel','status'=>0])->pages(8)['lists'];
-    	//获取出地区标签
-    	$data['area_list'] = $labelModel->where(['flag'=>'area','status'=>0])->pages(8)['lists'];
-    	//获取分类标签
-    	$data['cate_list'] = $labelModel->where(['flag'=>'cate','status'=>0])->pages(12)['lists'];*/
-    	//获取所有的标签数据
+    	
+    	//获取分类导航栏的标签数据
     	$data['labels'] = getLabelsCate();
+
     	//获取影片数据
     	$vm = $this->db->table('vedio');
     	//分别获取点击量最高 根据pv值排序取出
@@ -81,7 +75,7 @@ class Index extends Controller
     	$data['pageSize'] = 5;
     	$data['data'] = $vm->where($where)->order(['id'=>'desc'])->pages($data['pageSize']);
 
-    	//获取所有的标签数据
+    	//获取分类导航标签数据
     	$data['labels'] = getLabelsCate();
 
     	//侧边栏数据
@@ -132,12 +126,34 @@ class Index extends Controller
     		//非有子集影片 默认播放影片则是自己
     		$data['cur_vedio'] = $data['info'];
     	}
+
+    	//获取分类导航标签数据
+    	$data['labels'] = getLabelsCate();
+    	
     	//更新当前播放影片的pv值
     	$vm->where(['id'=>$data['cur_vedio']['id']])->inc( 'pv', 1);
     	// dump($data);die;
     	//渲染模板
     	$this->assign('data', $data);
     	return $this->fetch();
+    }
+
+    /**
+     * 点赞 点踩方法
+     */
+    public function likes(){
+    	//接收type 0赞 1踩
+    	$type = (int)input('param.type');
+    	$curId = (int)input('param.cur_id');
+    	if(isset($type) && !empty($curId) ){
+	    	$type == 0 ? $col = 'like' : $col = 'not_like';
+	    	//调用数据库更新
+	    	$res = $this->db->table('vedio')->where(['id'=>$curId])->inc($col,1);
+	    	if(!$res){
+	    		return ['code'=>1,'msg'=>'操作失败'];
+	    	}
+	    	return ['code'=>0,'msg'=>'操作成功'];
+    	}
     }
 
 }
